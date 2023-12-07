@@ -1,0 +1,19 @@
+version: '3.8'
+services:
+  dev-db:
+    image: postgres:13
+    ports:
+      - 5434:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123
+      POSTGRES_DB: nest
+    networks:
+      - desktop
+    volumes:
+      - 3c49057de78ed2c5997d961ab21597db3de0a9e787bbc7d4c1f610dac237bec5:/var/lib/postgresql/data
+networks:
+  desktop:
+
+volumes:
+  pg_data:

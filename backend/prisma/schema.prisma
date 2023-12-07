@@ -1,0 +1,60 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id String @id @default(uuid())
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  email    String
+  password String
+
+  firstName String
+  lastName  String
+  page      Page[]
+  component Component[]
+}
+
+model Page {
+  id    String @id @default(uuid())
+  title String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  component Component[]
+}
+
+model Component {
+  id String @id @default(uuid())
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  parentId String?
+  parent   Component?  @relation("ParentComponent", fields: [parentId], references: [id])
+  children Component[] @relation("ParentComponent")
+
+  pageId  String
+  page    Page          @relation(fields: [pageId], references: [id])
+  text    String?
+  type    ComponentType
+  owner   User          @relation(fields: [ownerId], references: [id])
+  ownerId String
+}
+
+enum ComponentType {
+  ROOT
+  PARAGRAPH
+  LIST
+}
